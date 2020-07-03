@@ -172,7 +172,41 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#bootstrap-data-table-export').DataTable();
+            loadOpportunities();
         });
+
+
+        function loadOpportunities() {
+
+            $.ajax({
+                'url': 'https://search.torre.co/opportunities/_search/?',
+                'type': 'post',
+                'data': {},
+                'success': function (data) {
+                    populateDataTable(data["results"]);
+                },
+                'error': function (err) {
+                    alert ('Error');
+                }
+            });
+
+        }
+
+        function populateDataTable(data) {
+            console.log("populating data table...");
+            $("#bootstrap-data-table").dataTable().fnClearTable();
+            $.each(data, function(k, v){
+                $('#bootstrap-data-table').dataTable().fnAddData([
+                    v.objective,
+                    v.type,
+                    v.organizations[0].name,
+                    v.remote,
+                    v.deadline
+                ]);
+            });
+        }
+
+
     </script>
 
 
